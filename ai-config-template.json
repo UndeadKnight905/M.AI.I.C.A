@@ -1,0 +1,24 @@
+{
+  "name": "Example AI Model",
+  "version": "1.0.0",
+  "type": "local",
+  "model": "llama-2-7b",
+  "description": "Example local AI model configuration",
+  "parameters": {
+    "temperature": 0.7,
+    "max_tokens": 2048,
+    "top_p": 0.9
+  },
+  "capabilities": [
+    "text_generation",
+    "question_answering",
+    "summarization"
+  ],
+  "file_paths": [
+    "./models/model.gguf"
+  ],
+  "settings": {
+    "gpu_enabled": false,
+    "context_length": 2048
+  }
+}

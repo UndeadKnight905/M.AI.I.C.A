@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!-- Made by UneadKnight905 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar - AI Management -->
+        <div class="sidebar">
+            <div class="sidebar-header">🤖 AI Models</div>
+            <div class="sidebar-content">
+                <div class="ai-list" id="aiList">
+                    <div class="empty-state-text" style="font-size: 12px; padding: 20px; text-align: center; color: #999;">
+                        No AIs added yet. Click "Add AI" to get started!
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <button class="btn btn-primary" id="addAiBtn">+ Add AI</button>
+                <button class="btn btn-secondary" id="statusBtn">📊</button>
+                <input type="file" id="aiFilePicker" style="display: none;">
+                <input type="file" id="backgroundImagePicker" accept="image/*" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <!-- Header with Mode Selector -->
+            <div class="main-header">
+                <button class="burger-menu-btn" id="burgerMenuBtn">☰</button>
+                <div class="header-title">Ultra AI Assistant</div>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="single">Single AI</button>
+                    <button class="mode-btn" data-mode="multi">Super AI</button>
+                </div>
+            </div>
+
+            <!-- Burger Menu Panel -->
+            <div class="burger-menu-panel" id="burgerMenuPanel">
+                <div class="menu-header">
+                    <h3>Menu</h3>
+                    <button class="menu-close-btn" id="closeMenuBtn">✕</button>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>🎨 Theme Color</h4>
+                    <div class="theme-selector">
+                        <button class="theme-btn" data-theme="purple" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" title="Purple">
+                            <span class="theme-check">✓</span>
+                        </button>
+                        <button class="theme-btn" data-theme="blue" style="background: linear-gradient(135deg, #667eea 0%, #0084ff 100%);" title="Blue"></button>
+                        <button class="theme-btn" data-theme="pink" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" title="Pink"></button>
+                        <button class="theme-btn" data-theme="green" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);" title="Green"></button>
+                        <button class="theme-btn" data-theme="orange" style="background: linear-gradient(135deg, #fa7e1e 0%, #fcb045 100%);" title="Orange"></button>
+                        <button class="theme-btn" data-theme="dark" style="background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);" title="Dark"></button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h4>🖼️ Background</h4>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="bg-preset-btn" data-bg="gradient1" title="Gradient 1" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></button>
+                        <button class="bg-preset-btn" data-bg="gradient2" title="Gradient 2" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></button>
+                        <button class="bg-preset-btn" data-bg="gradient3" title="Gradient 3" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);"></button>
+                        <button class="bg-preset-btn" data-bg="solid" title="Solid Color" style="background: #ffffff; border: 2px solid #ddd;"></button>
+                        <button class="bg-preset-btn" id="uploadBgBtn" title="Upload Image" style="background: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23667eea%22><path d=%22M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z%22/></svg>'); background-size: 50%; background-repeat: no-repeat; background-position: center; background-color: #f5f5f5; border: 2px dashed #667eea;"></button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h4>💬 Past Chats</h4>
+                    <div class="past-chats-list" id="pastChatsList">
+                        <div class="no-chats-text">No past chats yet</div>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <button class="menu-btn" id="clearChatsBtn">🗑️ Clear All Chats</button>
+                    <button class="menu-btn" id="exportChatsBtn">📥 Export Chats</button>
+                </div>
+            </div>
+
+            <!-- Active AIs Display -->
+            <div class="active-ais" id="activeAisContainer" style="display: none;">
+                <span class="active-ais-label">Active:</span>
+                <div id="activeAiBadges"></div>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <div class="empty-state-text">Select an AI to start chatting</div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="attach-btn" id="attachImageBtn" title="Attach Image">🖼️</button>
+                    <input type="text" class="input-field" id="messageInput" placeholder="Type your message here..." disabled>
+                    <button class="send-btn" id="sendBtn" disabled>Send</button>
+                    <input type="file" id="chatImagePicker" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <!-- Status Panel -->
+            <div class="status-panel" id="statusPanel">
+                <div class="status-header">
+                    <h2>System Status & Usage</h2>
+                    <button class="close-status-btn" id="closeStatusBtn">✕</button>
+                </div>
+
+                <div class="status-content">
+                    <!-- Statistics -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🤖</div>
+                            <div class="stat-info">
+                                <div class="stat-label">AI Models</div>
+                                <div class="stat-value" id="aiCountStat">0</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">💬</div>
+                            <div class="stat-info">
+                                <div class="stat-label">Total Messages</div>
+                                <div class="stat-value" id="messageStat">0</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">📝</div>
+                            <div class="stat-info">
+                                <div class="stat-label">Chat Sessions</div>
+                                <div class="stat-value" id="chatSessionStat">0</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <div class="stat-label">Session Time</div>
+                                <div class="stat-value" id="sessionTimeStat">0:00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Info -->
+                    <div class="info-section">
+                        <h3>System Information</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">Browser:</span>
+                                <span class="info-value" id="browserInfo">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Storage Used:</span>
+                                <span class="info-value" id="storageInfo">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Current Theme:</span>
+                                <span class="info-value" id="themeInfo">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Current Mode:</span>
+                                <span class="info-value" id="modeInfo">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Active AIs:</span>
+                                <span class="info-value" id="activeAisInfo">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Stats -->
+                    <div class="info-section">
+                        <h3>Performance</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">Avg Response Time:</span>
+                                <span class="info-value" id="responseTimeInfo">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Messages/Hour:</span>
+                                <span class="info-value" id="messagesPerHourInfo">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent AIs -->
+                    <div class="info-section">
+                        <h3>Loaded AI Models</h3>
+                        <div class="ai-list-compact" id="aiListCompact">
+                            <div style="color: #999; font-size: 12px;">No AIs loaded</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
